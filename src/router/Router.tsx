@@ -1,3 +1,5 @@
+import Login from "@/pages/Authentication/Login";
+import Register from "@/pages/Authentication/Register";
 import ErrorPage from "@/pages/Home/ErrorPage/ErrorPage";
 import Home from "@/pages/Home/Home";
 import Root from "@/Root/Root";
@@ -12,6 +14,14 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home></Home>,
+      },
+      {
+        path: "/register",
+        element: <Register></Register>,
+      },
+      {
+        path: "/login",
+        element: <Login></Login>,
       },
     ],
   },

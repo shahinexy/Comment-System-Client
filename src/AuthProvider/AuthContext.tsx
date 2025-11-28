@@ -7,6 +7,11 @@ export interface AuthContextType {
   setUser: (user: any) => void;
   logoutUser: () => void;
   loading: boolean;
+  token: string | null;
+  refetch: boolean;
+  setRefetch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined
+);

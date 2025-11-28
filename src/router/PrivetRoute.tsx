@@ -1,13 +1,17 @@
 import { Navigate, useLocation } from "react-router-dom";
-import Loader from "../components/Loader";
-import { PropTypes } from "prop-types";
 import useAuth from "@/Hooks/useAuth";
+import Loader from "@/components/common/Loader";
+import type { ReactNode } from "react";
 
-const PrivetRoute = ({ children }) => {
-  const { user, loader } = useAuth();
+interface PrivateRouteProps {
+  children: ReactNode;
+}
+
+const PrivetRoute = ({ children }: PrivateRouteProps) => {
+  const { user, loading } = useAuth();
   const location = useLocation();
 
-  if (loader) {
+  if (loading) {
     return <Loader></Loader>;
   }
 
@@ -15,10 +19,6 @@ const PrivetRoute = ({ children }) => {
     return children;
   }
   return <Navigate to={"/login"} state={location.pathname}></Navigate>;
-};
-
-PrivetRoute.propTypes = {
-  children: PropTypes.node,
 };
 
 export default PrivetRoute;
