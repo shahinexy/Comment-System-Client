@@ -1,6 +1,6 @@
 import Login from "@/pages/Authentication/Login";
 import Register from "@/pages/Authentication/Register";
-import ErrorPage from "@/pages/Home/ErrorPage/ErrorPage";
+import ErrorPage from "@/pages/ErrorPage/ErrorPage";
 import Home from "@/pages/Home/Home";
 import Root from "@/Root/Root";
 import { createBrowserRouter } from "react-router-dom";

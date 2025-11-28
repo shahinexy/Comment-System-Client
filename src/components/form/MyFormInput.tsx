@@ -56,7 +56,7 @@ const MyFormInput = ({
   acceptType,
 }: MyFormInputProps) => {
   const { control, getValues, setValue } = useFormContext();
-  const inputValue = useWatch({ control, name }) ?? ""; 
+  const inputValue = useWatch({ control, name }) ?? "";
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
 
@@ -103,7 +103,7 @@ const MyFormInput = ({
                   htmlFor={name}
                   className={cn(
                     "border border-[#7E1F7F40] rounded-lg p-6 flex flex-col items-center justify-center bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors relative overflow-hidden",
-                    "min-h-[100px]",
+                    "min-h-[150px]",
                     error ? "border-red-500" : "",
                     inputClassName
                   )}
@@ -111,9 +111,9 @@ const MyFormInput = ({
                   {preview ? (
                     <div className="absolute inset-0 w-full h-full">
                       <img
-                        src={"/placeholders/placeholder.png"}
+                        src={preview || "/placeholders/placeholder.png"}
                         alt="Preview"
-                        className="object-contain p-2"
+                        className="w-full h-full p-2"
                       />
                     </div>
                   ) : (
@@ -146,6 +146,7 @@ const MyFormInput = ({
                     accept={acceptType}
                     multiple={isMultiple}
                     className="hidden"
+                    required={required}
                     disabled={disabled}
                     onChange={(e) => {
                       const files = e.target.files;
@@ -230,7 +231,7 @@ const MyFormInput = ({
                 disabled={disabled}
               />
             )}
-      
+
             {type === "password" && (
               <button
                 type="button"
@@ -244,7 +245,7 @@ const MyFormInput = ({
                 )}
               </button>
             )}
-     
+
             <div className="h-4 mb-1">
               {error && (
                 <small className="text-red-500 text-xs">{error.message}</small>

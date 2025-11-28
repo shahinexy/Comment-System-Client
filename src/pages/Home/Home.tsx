@@ -1,9 +1,12 @@
+import CreatePostModal from "./HomeComponents/CreatePostModal";
+import PostList from "./HomeComponents/PostList";
 
 
 const Home = () => {
     return (
-        <div className="text-green-500 font-bold text-3xl">
-            This is home page
+        <div className="space-y-5">
+            <CreatePostModal />
+            <PostList />
         </div>
     );
 };

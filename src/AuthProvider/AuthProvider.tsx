@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, type ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
+import type { TUser } from "@/type/dataType";
 
 interface Props {
   children: ReactNode;
 }
 
 const AuthProvider = ({ children }: Props) => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<TUser | null>(null);
   const [token, setToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [refetch, setRefetch] = useState<boolean>(true)
-
+  const [loading, setLoading] = useState<boolean>(true);
+  const [refetch, setRefetch] = useState<boolean>(true);
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
@@ -33,7 +33,9 @@ const AuthProvider = ({ children }: Props) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, logoutUser, loading, token, refetch, setRefetch }}>
+    <AuthContext.Provider
+      value={{ user, setUser, logoutUser, loading, token, refetch, setRefetch }}
+    >
       {children}
     </AuthContext.Provider>
   );
