@@ -1,21 +1,66 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { usePosts } from "@/api/post";
+import { usePosts, useUnauthenticatedUserPosts } from "@/api/post";
+import { AuthContext } from "@/AuthProvider/AuthContext";
 import Loader from "@/components/common/Loader";
 import type { TPost } from "@/type/dataType";
+import { useContext, useState } from "react";
+import { AiFillLike } from "react-icons/ai";
+import { AiFillDislike } from "react-icons/ai";
+import { RiMessage2Line } from "react-icons/ri";
+import { Link } from "react-router-dom";
 
 const PostList = () => {
-  const { data, isLoading } = usePosts();
+  const [filterBy, setFilterBy] = useState<
+    "mostLiked" | "mostDisliked" | "all"
+  >("all");
 
-  console.log(data?.data?.data);
+  const { user } = useContext(AuthContext) || {};
+
+  const privateQuery = usePosts(filterBy, !!user);
+  const publicQuery = useUnauthenticatedUserPosts(filterBy);
+
+  const data = user ? privateQuery.data : publicQuery.data;
+  const isLoading = user ? privateQuery.isLoading : publicQuery.isLoading;
 
   if (isLoading) <Loader />;
 
   const posts = data?.data?.data;
   return (
-  <div className="space-y-5">
+    <div className="space-y-5">
+      <div className="flex justify-end gap-3 mb-3">
+        <button
+          className={`px-3 py-1 rounded-md border ${
+            filterBy === "mostLiked"
+              ? "bg-primary text-white"
+              : "bg-white text-black"
+          }`}
+          onClick={() => setFilterBy("mostLiked")}
+        >
+          Most Liked
+        </button>
+
+        <button
+          className={`px-3 py-1 rounded-md border ${
+            filterBy === "mostDisliked"
+              ? "bg-primary text-white"
+              : "bg-white text-black"
+          }`}
+          onClick={() => setFilterBy("mostDisliked")}
+        >
+          Most Disliked
+        </button>
+
+        <button
+          className={`px-3 py-1 rounded-md border ${
+            filterBy === "all" ? "bg-primary text-white" : "bg-white text-black"
+          }`}
+          onClick={() => setFilterBy("all")}
+        >
+          All
+        </button>
+      </div>
+
       {posts?.map((post: TPost) => (
         <div key={post.id} className="bg-white p-5 rounded-lg">
-            
           <div className="mt-4 flex items-center gap-3 mb-5">
             {post.user.image ? (
               <img
@@ -41,11 +86,34 @@ const PostList = () => {
             />
           )}
 
-
-          <div className="flex gap-4 mt-3 text-sm text-gray-500">
-            <span>👍 {post.likeCount}</span>
-            <span>👎 {post.dislikeCount}</span>
-            <span>💬 {post.commentCount}</span>
+          <div className="flex gap-4 mt-3 text-gray-500">
+            <button className={`flex gap-1 items-center text-lg `}>
+              <AiFillLike
+                size={20}
+                className={`${
+                  user?.id === post?.viewerReaction?.userId &&
+                  post?.viewerReaction?.reactionType === "LIKE"
+                    ? "text-primary"
+                    : "text-gray-400"
+                }`}
+              />{" "}
+              {post.likeCount}
+            </button>
+            <button className="flex gap-1 items-center text-lg">
+              <AiFillDislike
+                size={20}
+                className={`${
+                  user?.id === post?.viewerReaction?.userId &&
+                  post?.viewerReaction?.reactionType === "DISLIKE"
+                    ? "text-primary"
+                    : "text-gray-400"
+                }`}
+              />{" "}
+              {post.dislikeCount}
+            </button>
+            <Link to={`/post/${post?.id}`} className="flex gap-1 items-center text-lg">
+              <RiMessage2Line size={20} /> {post.commentCount}
+            </Link>
           </div>
         </div>
       ))}

@@ -3,8 +3,6 @@ export type TUser = {
   image?: string | null;
 };
 
-
-
 export type TPost = {
   id: string;
   description: string;
@@ -13,5 +11,25 @@ export type TPost = {
   likeCount: number;
   dislikeCount: number;
   commentCount: number;
-  createdAt: string; 
-}
+  createdAt: string;
+  viewerReaction?: {
+    reactionType: "LIKE" | "DISLIKE" | null;
+    userId: string;
+  };
+};
+
+export type TCommentUser = {
+  id: string;
+  fullName: string;
+  image: string;
+};
+
+export type TComment = {
+  id: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+  postId: string;
+  user: TCommentUser;
+};
