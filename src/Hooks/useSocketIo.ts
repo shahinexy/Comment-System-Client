@@ -2,54 +2,52 @@
 import { useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
 
-const useSocketAuth = (url: string, authToken: string) => {
+export const usePostSocket = (url: string, authToken: string, postId: string) => {
   const socketRef = useRef<Socket | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [error, setError] = useState("");
+  const [comments, setComments] = useState();
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    if (socketRef.current) return; 
+    if (socketRef.current) return;
 
-    const s = io(url, {
-      transports: ["websocket"],
-      autoConnect: false,
+    const socket = io(url, { transports: ["websocket"], autoConnect: false });
+    socketRef.current = socket;
+
+    socket.connect();
+
+    socket.on("connect", () => {
+      setIsConnected(true);
+      console.log("Socket connected:", socket.id);
+
+      socket.emit("authenticate", { token: authToken });
     });
 
-    s.onAny((event, ...args) => {
-      console.log(`🔵 [SOCKET EVENT] ${event}`, args);
+    socket.on("authenticate", () => {
+      console.log("Authenticated");
+      socket.emit("joinPost", { postId });
     });
 
-    socketRef.current = s;
-    s.connect();
-
-    s.on("connect", () => {
-      console.log("🟢 Socket connected:", s.id);
-      s.emit("authenticate", { token: authToken });
-    });
-
-    s.on("authenticate", (data: any) => {
-      console.log("✅ AUTH SUCCESS:", data);
-      setIsAuthenticated(true);
-    });
-
-    s.on("socketError", (err: any) => {
-      console.log("❌ AUTH ERROR:", err);
-      setError(err.message);
-      s.disconnect();
-    });
-
-    s.on("connect_error", (err) => {
-      console.log("❌ CONNECT ERROR:", err.message);
+    socket.on("newComment", (payload: any) => {
+      setComments(payload.comment);
     });
 
     return () => {
-      console.log("🔴 Socket disconnected");
-      s.disconnect();
+      socket.emit("leavePost", { postId });
+      socket.disconnect();
       socketRef.current = null;
     };
-  }, [url, authToken]);
+  }, [url, authToken, postId]);
 
-  return { isAuthenticated, error };
+  const postComment = (content: string) => {
+    if (!socketRef.current) return;
+    // const tempComment = {
+    //   id: `temp-${Date.now()}`,
+    //   content,
+    //   user: { fullName: "You", image: null },
+    // };
+    // setComments(prev => [...prev, tempComment]); 
+    socketRef.current.emit("createComment", { postId, content });
+  };
+
+  return { comments, postComment, isConnected };
 };
-
-export default useSocketAuth;
