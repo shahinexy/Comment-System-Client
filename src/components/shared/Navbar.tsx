@@ -4,12 +4,12 @@ import { Link } from "react-router";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-const context = useContext(AuthContext);
-if (!context) {
-  throw new Error("AuthContext must be used within an AuthProvider");
-}
-const { user, logoutUser } = context;
-  
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("AuthContext must be used within an AuthProvider");
+  }
+  const { user, logoutUser } = context;
+
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -17,9 +17,9 @@ const { user, logoutUser } = context;
     navigate("/login");
   };
   return (
-    <div className="max-w-3xl px-3 mx-auto flex justify-between items-center gap-5 text-black">
-      <Link to={"/"} className="text-2xl font-bold text-primary">
-        CommenTy
+    <div className="max-w-3xl px-3 mx-auto flex justify-between items-center md:gap-5 gap-2 text-black">
+      <Link to={"/"} className="md:text-2xl text-lg font-bold text-primary">
+        CoTy
       </Link>
 
       {user ? (
@@ -39,7 +39,7 @@ const { user, logoutUser } = context;
 
           <button
             onClick={handleLogout}
-            className="px-4 py-1.5 rounded-lg bg-primary text-white hover:bg-secondary transition"
+            className="md:px-4 px-3 py-1.5 text-base md:text-m  rounded-lg bg-primary text-white hover:bg-secondary transition"
           >
             Log Out
           </button>
@@ -48,14 +48,14 @@ const { user, logoutUser } = context;
         <div className="flex items-center gap-3">
           <Link
             to="/login"
-            className="px-4 py-1.5 rounded-lg bg-primary text-white hover:bg-secondary transition"
+            className="md:px-4 px-3 py-1.5 text-base md:text-m  rounded-lg bg-primary text-white hover:bg-secondary transition"
           >
             Login
           </Link>
 
           <Link
             to="/register"
-            className="px-4 py-1.5 rounded-lg bg-primary text-white hover:bg-secondary transition"
+            className="md:px-4 px-3 py-1.5 text-base md:text-m  rounded-lg bg-primary text-white hover:bg-secondary transition"
           >
             Register
           </Link>

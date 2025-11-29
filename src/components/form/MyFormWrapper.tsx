@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
 import { FormProvider, useForm, useWatch } from "react-hook-form"; 
 import { useEffect } from "react";
 import { cn } from "@/lib/utils";

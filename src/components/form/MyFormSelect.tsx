@@ -1,4 +1,3 @@
-"use client";
 import { Controller, useFormContext } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa"; 

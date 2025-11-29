@@ -45,7 +45,7 @@ const CommentReplay = ({
   if (isLoading) return <Loader />;
   return (
     <div className="relative">
-      <div className="max-h-[500px] overflow-y-auto rounded-lg bg-white px-5 pt-1 pb-24 space-y-2">
+      <div className="max-h-[500px] overflow-y-auto rounded-lg bg-white md:px-5 p-1 pt-1 pb-24 space-y-2">
         {replyList?.length < 1 && (
           <p className="text-center text-primary my-12 font-medium">
             No reply yet...
@@ -83,7 +83,7 @@ const CommentReplay = ({
         ))}
       </div>
 
-      <div className="absolute bottom-0 left-0 w-full bg-white border-t px-5 py-2">
+      <div className="absolute bottom-0 left-0 w-full bg-white border-t md:px-5 placeholder: py-2">
         <MyFormWrapper
           onSubmit={handleCommentSubmit}
           className="flex justify-between gap-2"
@@ -100,7 +100,7 @@ const CommentReplay = ({
           <div className="inline-block">
             <button
               type="submit"
-              className="px-4 py-3 bg-primary text-white rounded-md hover:bg-secondary transition"
+              className="md:px-4 p-3 md:py-3 py- bg-primary text-white rounded-md hover:bg-secondary transition"
             >
               Reply
             </button>

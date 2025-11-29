@@ -27,7 +27,7 @@ const PostList = () => {
   const data = user ? privateQuery.data : publicQuery.data;
   const isLoading = user ? privateQuery.isLoading : publicQuery.isLoading;
 
-  if (isLoading) <Loader />;
+  if (isLoading) return <Loader />;
 
   const posts = data?.data?.data;
 

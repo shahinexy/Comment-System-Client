@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/set-state-in-effect */
 import { AuthContext } from "@/AuthProvider/AuthContext";
 import MyFormInput from "@/components/form/MyFormInput";
@@ -15,12 +16,16 @@ const CommentForm = ({ postId }: { postId: string }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [commentList, setCommentList] = useState<TComment[]>([]);
   const { token } = useContext(AuthContext) || {};
-  const { postComment, comment, setComment } = usePostSocket(
-    "ws://localhost:2025",
-    token!,
-    postId
-  );
-  
+  const {
+    postComment,
+    comment,
+    setComment,
+    commentUpdate,
+    setCommentUpdate,
+    deletedComment,
+    setDeletedComment,
+  } = usePostSocket("ws://localhost:2025", token!, postId);
+
   const { data, isLoading } = usePostComments(postId, 10, currentPage);
 
   const metaData = data?.data?.meta;
@@ -31,10 +36,32 @@ const CommentForm = ({ postId }: { postId: string }) => {
 
   useEffect(() => {
     if (comment) {
-      setCommentList(prev => [comment, ...prev]);
-      setComment(null)
+      setCommentList((prev) => [comment, ...prev]);
+      setComment(null);
     }
   }, [comment]);
+
+  useEffect(() => {
+    if (commentUpdate) {
+      const list = commentList?.map((item) => {
+        if (item.id === commentUpdate?.id) {
+          return { ...item, content: commentUpdate.content };
+        }
+
+        return item;
+      });
+      setCommentList(list);
+      setCommentUpdate(null);
+    }
+  }, [commentUpdate]);
+
+  useEffect(() => {
+    if (deletedComment) {
+      const list = commentList.filter((item) => item.id !== deletedComment.commentId);
+      setCommentList(list);
+      setDeletedComment(null);
+    }
+  }, [deletedComment]);
 
   const handleCommentSubmit = (data: FieldValues) => {
     postComment(data.content);
