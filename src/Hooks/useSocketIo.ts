@@ -26,19 +26,16 @@ export const usePostSocket = (
 
     socket.connect();
 
-    socket.onAny((eventName, ...args) => {
-      console.log("Event Received:", eventName, args);
-    });
+    // socket.onAny((eventName, ...args) => {
+    //   console.log("Event Received:", eventName, args);
+    // });
 
     socket.on("connect", () => {
       setIsConnected(true);
-      console.log("Socket connected:", socket.id);
-
       socket.emit("authenticate", { token: authToken });
     });
 
     socket.on("authenticate", () => {
-      console.log("Authenticated");
       socket.emit("joinPost", { postId });
     });
 

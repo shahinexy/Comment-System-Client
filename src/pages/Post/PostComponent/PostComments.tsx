@@ -15,7 +15,6 @@ import EditModal from "@/components/common/EditModal";
 const PostComments = ({ commentList }: { commentList: TComment[] }) => {
   const { user } = useContext(AuthContext) || {};
 
-  console.log(user);
   return (
     <div className="mt-6">
       <h2 className="text-xl font-semibold mb-4">Comments</h2>
