@@ -34,12 +34,6 @@ const PostList = () => {
   const handleReaction = (postData: any, reactionType: "LIKE" | "DISLIKE") => {
     postReactMutation.mutate(
       { id: postData?.id, data: { reactionType } }
-      // {
-      //   onSuccess: () => {},
-      //   onError: (error: any) => {
-      //     // setOpen(false);
-      //   },
-      // }
     );
   };
   return (

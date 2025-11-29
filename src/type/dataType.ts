@@ -33,3 +33,13 @@ export type TComment = {
   postId: string;
   user: TCommentUser;
 };
+
+export type TCommentReply = {
+  id: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+  commentId: string;
+  user: TCommentUser;
+};

@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "@/AuthProvider/AuthContext";
 import { IoIosArrowBack } from "react-icons/io";
-import PostComments from "./PostComponent/PostComments";
+import CommentForm from "./PostComponent/CommentForm";
 
 const SinglePost = () => {
   const { id } = useParams();
@@ -83,7 +83,7 @@ const SinglePost = () => {
         </div>
       </div>
 
-      <PostComments id={post?.id} />
+      <CommentForm postId={post?.id}/>
     </div>
   );
 };

@@ -1,27 +1,57 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useCommentReplies } from "@/api/post";
 import MyFormInput from "@/components/form/MyFormInput";
 import MyFormWrapper from "@/components/form/MyFormWrapper";
 import type { FieldValues } from "react-hook-form";
 import { formatDistanceToNow } from "date-fns";
-import type { TComment } from "@/type/dataType";
+import type { TCommentReply } from "@/type/dataType";
+import { usePostSocket } from "@/Hooks/useSocketIo";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "@/AuthProvider/AuthContext";
+import Loader from "@/components/common/Loader";
 
-const CommentReplay = ({ commentId }: { commentId: string }) => {
-  const { data } = useCommentReplies(commentId);
+const CommentReplay = ({
+  commentId,
+  postId,
+}: {
+  commentId: string;
+  postId: string;
+}) => {
+  const [replyList, setReplyList] = useState<TCommentReply[]>([]);
+  const { data, isLoading } = useCommentReplies(commentId);
+  const { token } = useContext(AuthContext) || {};
 
-  const replies = data?.data;
-  const handleCommentSubmit = (formData: FieldValues) => {
-    console.log("New comment:", formData);
+  const { postCommentReply, commentReply, setCommentReply } = usePostSocket(
+    "ws://localhost:2025",
+    token!,
+    postId
+  );
+
+  useEffect(() => {
+    setReplyList(data?.data);
+  }, [data]);
+
+  useEffect(() => {
+    if (commentReply) {
+      setReplyList((prev) => [...prev, commentReply]);
+      setCommentReply(null);
+    }
+  }, [commentReply]);
+
+  const handleCommentSubmit = (data: FieldValues) => {
+    postCommentReply({ commentId: commentId, content: data.content });
   };
 
+  if (isLoading) return <Loader />;
   return (
     <div className="relative">
       <div className="max-h-[500px] overflow-y-auto rounded-lg bg-white px-5 pt-1 pb-24 space-y-2">
-        {replies?.length < 1 && (
+        {replyList?.length < 1 && (
           <p className="text-center text-primary my-12 font-medium">
             No reply yet...
           </p>
         )}
-        {replies?.map((reply: TComment) => (
+        {replyList?.map((reply: TCommentReply) => (
           <div
             key={reply?.id}
             className="w-full border p-1 rounded-lg bg-gray-50 flex gap-3"
