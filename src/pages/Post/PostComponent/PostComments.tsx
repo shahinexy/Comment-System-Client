@@ -35,10 +35,11 @@ const PostComments = ({ commentList }: { commentList: TComment[] }) => {
                     <div className="absolute top-1 flex justify-end right-2 gap-2 items-center">
                       <EditModal
                         commentId={comment?.id}
-                        postId={comment.postId}
+                        postId={comment?.postId}
+                        defaultValue={comment?.content}
                       />
                       <ActionModal  commentId={comment?.id}
-                        postId={comment.postId} />
+                        postId={comment?.postId} />
                     </div>
                   )}
 

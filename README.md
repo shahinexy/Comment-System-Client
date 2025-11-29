@@ -1,73 +1,118 @@
-# React + TypeScript + Vite
+# Comment System – MERN Stack (with Real-Time Updates)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a fully functional comment system built using the MERN stack (MongoDB, Express.js, React.js, Node.js) with JWT authentication and real-time updates using Socket.IO.
 
-Currently, two official plugins are available:
+Users can add comments, edit/delete their own comments, reply to comments, react with like/dislike, sort, paginate, and see updates instantly in real time.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Because most free hosting platforms do not support Socket.IO WebSocket connections, the project should be run locally for full functionality.
 
-## React Compiler
+**Postman Collection:** https://documenter.getpostman.com/view/40338347/2sB3dLUX3d
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the ESLint configuration
+### Authentication & Authorization
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- JWT-based login/register
+- Only authenticated users can comment
+- Users can only edit/delete their own comments
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Comment System
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- Add, edit, delete comments
+- Reply to comments (nested replies)
+- Paginated comment list
+- Sort comments by:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+  - Newest (by default)
+  - Most liked
+  - Most disliked
+
+## Real-Time Updates (Socket.IO)
+
+- New comments appear instantly
+- Edits, deletes, replies sync live
+- Live like/dislike updates
+
+## Frontend
+
+- Built with React + TypeScript
+- React Query for API state
+- Socket.IO client
+- Tailwind CSS UI components
+- Clean, reusable components
+
+## Backend
+
+- Node.js + Express REST API
+- MongoDB (with Prisma/Mongoose)
+- Socket.IO real-time server
+- Modular architecture
+- Complete validation & error handling
+
+## Tech Stack
+
+`Frontend:` React, TypeScript, React Query, React Router, Aio, Tailwind CSS, Socket.IO Client
+`Backend:` Node.js, Express.js, MongoDB, Prisma, TypeScript, Socket.IO
+`Authentication:` JWT
+`Deployment:` Local (due to WebSocket requirement)
+
+## Project Set-Up Instructions
+
+Note: `.env` files are included in the repository for review.
+
+### Backend Setup
+
+#### 1. Clone the Repository
+
+```
+https://github.com/shahinexy/Comment-System-Server.git
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+#### 2. Install Dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+npm install
+```
+
+
+#### 3. Run the server in development mode
+
+```
+npm run dev
+```
+
+#### Server URL:
+
+```
+http://localhost:2025
+```
+
+
+### Frontend Setup
+
+#### 1. Clone the Repository
+
+```
+https://github.com/shahinexy/Comment-System-Client.git
+```
+
+#### 2. Install Dependencies
+
+```
+npm install
+```
+
+
+#### 3. Run the server in development mode
+
+```
+npm run dev
+```
+
+
+#### 4. Frontend URL:
+
+```
+npm run dev
+```
+

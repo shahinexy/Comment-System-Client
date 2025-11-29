@@ -17,9 +17,11 @@ import { AuthContext } from "@/AuthProvider/AuthContext";
 const EditModal = ({
   commentId,
   postId,
+  defaultValue
 }: {
   commentId: string;
   postId: string;
+  defaultValue: string;
 }) => {
   const [open, setOpen] = useState(false);
   const { token } = useContext(AuthContext) || {};
@@ -47,6 +49,7 @@ const EditModal = ({
             <MyFormWrapper
               onSubmit={handleCommentSubmit}
               className="flex justify-between gap-2 text-black"
+              defaultValues={{content: defaultValue}}
             >
               <MyFormInput
                 type="textarea"
