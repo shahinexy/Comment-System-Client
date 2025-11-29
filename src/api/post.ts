@@ -80,3 +80,13 @@ export const usePostComments = (
     enabled: !!postId,
   });
 };
+
+export const useCommentReplies = (commentId: string) => {
+  return useQuery({
+    queryKey: ["postComments", commentId],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/posts/comments/${commentId}`);
+      return res.data;
+    },
+  });
+};
