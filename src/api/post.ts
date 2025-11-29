@@ -27,16 +27,16 @@ export const usePostCreate = () => {
   });
 };
 
-export const usePosts = (filter?: string, enabled: boolean = true) => {
+export const usePosts = (filter?: string, userId?: string) => {
   return useQuery<any, Error>({
-    queryKey: ["posts", filter],
+    queryKey: ["posts", filter, userId],
     queryFn: async () => {
       const res = await axiosSecure.get("/posts", {
-        params: { filter },
+        params: { filter, userId },
       });
       return res.data;
     },
-    enabled,
+    enabled: !!userId,
   });
 };
 
@@ -87,6 +87,22 @@ export const useCommentReplies = (commentId: string) => {
     queryFn: async () => {
       const res = await axiosSecure.get(`/posts/comments/${commentId}`);
       return res.data;
+    },
+  });
+};
+
+export const usePostReact = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (postData: any) => {
+      const res = await axiosSecure.post(
+        `/posts/${postData.id}`,
+        postData.data
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
   });
 };

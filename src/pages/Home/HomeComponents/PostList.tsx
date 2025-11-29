@@ -1,4 +1,9 @@
-import { usePosts, useUnauthenticatedUserPosts } from "@/api/post";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  usePostReact,
+  usePosts,
+  useUnauthenticatedUserPosts,
+} from "@/api/post";
 import { AuthContext } from "@/AuthProvider/AuthContext";
 import Loader from "@/components/common/Loader";
 import type { TPost } from "@/type/dataType";
@@ -14,8 +19,9 @@ const PostList = () => {
   >("all");
 
   const { user } = useContext(AuthContext) || {};
+  const postReactMutation = usePostReact();
 
-  const privateQuery = usePosts(filterBy, !!user);
+  const privateQuery = usePosts(filterBy, user?.id);
   const publicQuery = useUnauthenticatedUserPosts(filterBy);
 
   const data = user ? privateQuery.data : publicQuery.data;
@@ -24,6 +30,18 @@ const PostList = () => {
   if (isLoading) <Loader />;
 
   const posts = data?.data?.data;
+
+  const handleReaction = (postData: any, reactionType: "LIKE" | "DISLIKE") => {
+    postReactMutation.mutate(
+      { id: postData?.id, data: { reactionType } }
+      // {
+      //   onSuccess: () => {},
+      //   onError: (error: any) => {
+      //     // setOpen(false);
+      //   },
+      // }
+    );
+  };
   return (
     <div className="space-y-5">
       <div className="flex justify-end gap-3 mb-3">
@@ -87,31 +105,40 @@ const PostList = () => {
           )}
 
           <div className="flex gap-4 mt-3 text-gray-500">
-            <button className={`flex gap-1 items-center text-lg `}>
+            <button
+              onClick={() => handleReaction(post, "LIKE")}
+              className={`flex gap-1 items-center text-lg `}
+            >
               <AiFillLike
                 size={20}
                 className={`${
                   user?.id === post?.viewerReaction?.userId &&
                   post?.viewerReaction?.reactionType === "LIKE"
                     ? "text-primary"
-                    : "text-gray-400"
+                    : "text-gray-300"
                 }`}
               />{" "}
               {post.likeCount}
             </button>
-            <button className="flex gap-1 items-center text-lg">
+            <button
+              onClick={() => handleReaction(post, "DISLIKE")}
+              className="flex gap-1 items-center text-lg"
+            >
               <AiFillDislike
                 size={20}
                 className={`${
                   user?.id === post?.viewerReaction?.userId &&
                   post?.viewerReaction?.reactionType === "DISLIKE"
                     ? "text-primary"
-                    : "text-gray-400"
+                    : "text-gray-300"
                 }`}
               />{" "}
               {post.dislikeCount}
             </button>
-            <Link to={`/post/${post?.id}`} className="flex gap-1 items-center text-lg">
+            <Link
+              to={`/post/${post?.id}`}
+              className="flex gap-1 items-center text-lg"
+            >
               <RiMessage2Line size={20} /> {post.commentCount}
             </Link>
           </div>

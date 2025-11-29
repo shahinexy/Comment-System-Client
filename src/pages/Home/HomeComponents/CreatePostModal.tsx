@@ -81,7 +81,7 @@ const CreatePostModal = () => {
             type="submit"
             className="w-full py-3 bg-primary text-white font-medium rounded-lg hover:bg-secondary transition"
           >
-           Publish Post
+            Publish Post
           </button>
         </MyFormWrapper>
       </DialogContent>
