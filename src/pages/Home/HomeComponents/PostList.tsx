@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   usePostReact,
@@ -7,7 +8,8 @@ import {
 import { AuthContext } from "@/AuthProvider/AuthContext";
 import Loader from "@/components/common/Loader";
 import type { TPost } from "@/type/dataType";
-import { useContext, useState } from "react";
+import { updateReaction } from "@/utils/updateReaction";
+import { useContext, useEffect, useState } from "react";
 import { AiFillLike } from "react-icons/ai";
 import { AiFillDislike } from "react-icons/ai";
 import { RiMessage2Line } from "react-icons/ri";
@@ -17,6 +19,7 @@ const PostList = () => {
   const [filterBy, setFilterBy] = useState<
     "mostLiked" | "mostDisliked" | "all"
   >("all");
+  const [postList, setPostList] = useState<TPost[]>([]);
 
   const { user } = useContext(AuthContext) || {};
   const postReactMutation = usePostReact();
@@ -27,15 +30,24 @@ const PostList = () => {
   const data = user ? privateQuery.data : publicQuery.data;
   const isLoading = user ? privateQuery.isLoading : publicQuery.isLoading;
 
+  useEffect(() => {
+    if (data?.data?.data) {
+      setPostList(data?.data?.data);
+    }
+  }, [data]);
+
   if (isLoading) return <Loader />;
 
-  const posts = data?.data?.data;
-
   const handleReaction = (postData: any, reactionType: "LIKE" | "DISLIKE") => {
-    postReactMutation.mutate(
-      { id: postData?.id, data: { reactionType } }
-    );
+    const updated = updateReaction(postData, user.id, reactionType);
+
+    const newPosts = postList?.map((p) => (p.id === updated.id ? updated : p));
+
+    setPostList(newPosts);
+
+    postReactMutation.mutate({ id: postData?.id, data: { reactionType } });
   };
+
   return (
     <div className="space-y-5">
       <div className="flex justify-end gap-3 mb-3">
@@ -71,7 +83,7 @@ const PostList = () => {
         </button>
       </div>
 
-      {posts?.map((post: TPost) => (
+      {postList?.map((post: TPost) => (
         <div key={post.id} className="bg-white p-5 rounded-lg">
           <div className="mt-4 flex items-center gap-3 mb-5">
             {post.user.image ? (

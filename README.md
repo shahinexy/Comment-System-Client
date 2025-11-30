@@ -116,6 +116,11 @@ npm run dev
 http://localhost:5173
 ```
 
+## Server Base URL
+
+```
+http://localhost:2025/api/v1
+```
 
 #### Auth Routes
 | Endpoint                  | Method | Description                       |

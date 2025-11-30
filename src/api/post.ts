@@ -54,7 +54,7 @@ export const useUnauthenticatedUserPosts = (filter?: string) => {
 
 export const useSinglePost = (id: string) => {
   return useQuery({
-    queryKey: ["post", id],
+    queryKey: ["posts", id],
     queryFn: async () => {
       const res = await axiosSecure.get(`/posts/${id}`);
       return res.data;

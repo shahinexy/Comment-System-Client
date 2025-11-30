@@ -15,7 +15,7 @@ export type TPost = {
   viewerReaction?: {
     reactionType: "LIKE" | "DISLIKE" | null;
     userId: string;
-  };
+  } | null;
 };
 
 export type TCommentUser = {
